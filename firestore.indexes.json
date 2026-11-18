@@ -1,0 +1,30 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "inscricoes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "turmaId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "criadaEm", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "inscricoes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "turmaId", "order": "ASCENDING" },
+        { "fieldPath": "criadaEm", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "turmas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cursoId", "order": "ASCENDING" },
+        { "fieldPath": "dataInicio", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
