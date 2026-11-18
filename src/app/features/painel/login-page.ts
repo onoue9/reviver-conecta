@@ -17,6 +17,11 @@ import { AuthService } from '../../services/auth.service';
       <mat-form-field>
         <mat-label>E-mail</mat-label>
         <input matInput type="email" formControlName="email" autocomplete="username" required />
+        @if (form.controls.email.hasError('required')) {
+          <mat-error>Informe o e-mail da equipe.</mat-error>
+        } @else if (form.controls.email.hasError('email')) {
+          <mat-error>Informe um e-mail válido, ex.: nome&#64;exemplo.com.</mat-error>
+        }
       </mat-form-field>
       <mat-form-field>
         <mat-label>Senha</mat-label>
@@ -27,6 +32,9 @@ import { AuthService } from '../../services/auth.service';
           autocomplete="current-password"
           required
         />
+        @if (form.controls.senha.hasError('required')) {
+          <mat-error>Informe a senha.</mat-error>
+        }
       </mat-form-field>
       @if (erro()) {
         <p class="erro" role="alert">{{ erro() }}</p>
