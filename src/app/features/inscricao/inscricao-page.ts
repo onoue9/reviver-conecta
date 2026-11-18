@@ -68,23 +68,23 @@ import {
           <mat-label>Nome completo</mat-label>
           <input matInput formControlName="nome" autocomplete="name" required />
           @if (form.controls.nome.hasError('required')) {
-            <mat-error>Informe o seu nome completo.</mat-error>
+            <mat-error>Informe seu nome completo.</mat-error>
           } @else if (form.controls.nome.hasError('minlength')) {
-            <mat-error>Informe pelo menos 3 letras no nome.</mat-error>
+            <mat-error>O nome precisa ter pelo menos 3 letras.</mat-error>
           }
         </mat-form-field>
         <mat-form-field>
           <mat-label>Data de nascimento</mat-label>
           <input matInput type="date" formControlName="dataNascimento" required />
           @if (form.controls.dataNascimento.hasError('required')) {
-            <mat-error>Informe a data de nascimento.</mat-error>
+            <mat-error>Informe sua data de nascimento.</mat-error>
           }
         </mat-form-field>
         <mat-form-field>
           <mat-label>Telefone (com DDD)</mat-label>
           <input matInput type="tel" formControlName="telefone" autocomplete="tel" required />
           @if (form.controls.telefone.hasError('required')) {
-            <mat-error>Informe o telefone com DDD, ex.: (11) 91234-5678.</mat-error>
+            <mat-error>Informe um telefone para contato.</mat-error>
           } @else if (form.controls.telefone.hasError('pattern')) {
             <mat-error>Informe o telefone com DDD, ex.: (11) 91234-5678.</mat-error>
           }
@@ -93,7 +93,7 @@ import {
           <mat-label>E-mail (opcional)</mat-label>
           <input matInput type="email" formControlName="email" autocomplete="email" />
           @if (form.controls.email.hasError('email')) {
-            <mat-error>Informe um e-mail válido, ex.: nome&#64;exemplo.com.</mat-error>
+            <mat-error>Informe um e-mail válido, ex.: nome&#64;email.com.</mat-error>
           }
         </mat-form-field>
         <mat-form-field>
@@ -103,22 +103,20 @@ import {
             <mat-error>Informe o bairro onde você mora.</mat-error>
           }
         </mat-form-field>
-        <mat-checkbox formControlName="consentimentoLgpd" required>
+        <mat-checkbox formControlName="consentimentoLgpd" aria-describedby="aviso-consentimento">
           Autorizo a ONG Reviver Capão a usar meus dados apenas para esta inscrição (LGPD).
         </mat-checkbox>
-        @if (
-          form.controls.consentimentoLgpd.invalid &&
-          (form.controls.consentimentoLgpd.dirty || form.controls.consentimentoLgpd.touched)
-        ) {
-          <p class="erro erro-campo" role="alert">
-            Marque esta caixa para autorizar o uso dos dados na inscrição.
+
+        @if (tentouEnviar() && !form.controls.consentimentoLgpd.value) {
+          <p id="aviso-consentimento" class="erro" role="alert">
+            Marque a autorização de uso dos dados para continuar.
           </p>
         }
 
         @if (erro()) {
           <p class="erro" role="alert">{{ erro() }}</p>
         }
-        <button mat-flat-button type="submit" [disabled]="form.invalid || enviando()">
+        <button mat-flat-button type="submit" [disabled]="enviando()">
           {{ enviando() ? 'Enviando…' : 'Confirmar inscrição' }}
         </button>
       </form>
@@ -127,6 +125,9 @@ import {
     }
   `,
   styles: `
+    h1 {
+      line-height: 1.25;
+    }
     .form {
       display: flex;
       flex-direction: column;
@@ -135,10 +136,6 @@ import {
     }
     .erro {
       color: var(--mat-sys-error);
-    }
-    .erro-campo {
-      font-size: 0.75rem;
-      margin: -4px 0 0 16px;
     }
   `,
 })
@@ -152,6 +149,7 @@ export class InscricaoPage implements OnInit {
   protected readonly turma = signal<Turma | null>(null);
   protected readonly resultado = signal<ResultadoInscricao | null>(null);
   protected readonly enviando = signal(false);
+  protected readonly tentouEnviar = signal(false);
   protected readonly erro = signal<string | null>(null);
   protected readonly vagas = vagasDisponiveis;
 
@@ -178,7 +176,11 @@ export class InscricaoPage implements OnInit {
   }
 
   protected async enviar(): Promise<void> {
-    if (this.form.invalid) return;
+    this.tentouEnviar.set(true);
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.enviando.set(true);
     this.erro.set(null);
     try {
@@ -205,5 +207,5 @@ function mensagemDeErro(error: unknown): string {
   ) {
     return error.message;
   }
-  return 'Não foi possível concluir a inscrição. Tente novamente mais tarde.';
+  return 'Não foi possível concluir a inscrição. Tente novamente.';
 }
