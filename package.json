@@ -3,10 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "ensure-env": "node scripts/ensure-environment.mjs",
+    "prestart": "npm run ensure-env",
     "start": "ng serve",
+    "prebuild": "npm run ensure-env",
     "build": "ng build",
+    "prewatch": "npm run ensure-env",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "pretest": "npm run ensure-env",
+    "test": "ng test",
+    "emulators": "npx -y firebase-tools@15 emulators:start"
   },
   "private": true,
   "packageManager": "npm@10.9.9",
