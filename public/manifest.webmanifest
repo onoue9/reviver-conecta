@@ -1,6 +1,6 @@
 {
-  "name": "reviver-conecta",
-  "short_name": "reviver-conecta",
+  "name": "Reviver Conecta",
+  "short_name": "Reviver Conecta",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
@@ -53,5 +53,7 @@
       "type": "image/png",
       "purpose": "maskable any"
     }
-  ]
+  ],
+  "description": "Inscrições e vagas nos cursos da ONG Reviver Capão",
+  "lang": "pt-BR"
 }
