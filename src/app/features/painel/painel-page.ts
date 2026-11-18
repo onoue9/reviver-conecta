@@ -58,9 +58,15 @@ import { InscricaoService } from '../../services/inscricao.service';
           <td mat-cell *matCellDef="let i">{{ i.criadaEm | date: 'dd/MM/yyyy HH:mm' }}</td>
         </ng-container>
         <ng-container matColumnDef="acoes">
-          <th mat-header-cell *matHeaderCellDef></th>
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
           <td mat-cell *matCellDef="let i">
-            <button mat-button (click)="cancelar(i)">Cancelar</button>
+            <button
+              mat-button
+              (click)="cancelar(i)"
+              [attr.aria-label]="'Cancelar inscrição de ' + i.nomeAluno"
+            >
+              Cancelar
+            </button>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="colunas"></tr>
@@ -72,7 +78,13 @@ import { InscricaoService } from '../../services/inscricao.service';
         @for (i of listaEspera(); track i.id) {
           <li>
             {{ i.nomeAluno }} — {{ i.criadaEm | date: 'dd/MM/yyyy HH:mm' }}
-            <button mat-button (click)="cancelar(i)">Remover</button>
+            <button
+              mat-button
+              (click)="cancelar(i)"
+              [attr.aria-label]="'Remover ' + i.nomeAluno + ' da lista de espera'"
+            >
+              Remover
+            </button>
           </li>
         } @empty {
           <p>Ninguém na lista de espera.</p>
