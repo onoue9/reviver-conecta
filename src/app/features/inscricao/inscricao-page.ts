@@ -9,8 +9,17 @@ import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 
 import { Turma, vagasDisponiveis } from '../../models';
+import {
+  InscricaoDuplicadaError,
+  TurmaEncerradaError,
+  TurmaNaoEncontradaError,
+} from '../../repositories/errors';
 import { CursoService } from '../../services/curso.service';
-import { InscricaoService, ResultadoInscricao } from '../../services/inscricao.service';
+import {
+  DadosInvalidosError,
+  InscricaoService,
+  ResultadoInscricao,
+} from '../../services/inscricao.service';
 
 @Component({
   selector: 'app-inscricao-page',
@@ -180,11 +189,21 @@ export class InscricaoPage implements OnInit {
       );
     } catch (error) {
       console.error(error);
-      this.erro.set(
-        error instanceof Error ? error.message : 'Não foi possível concluir a inscrição.',
-      );
+      this.erro.set(mensagemDeErro(error));
     } finally {
       this.enviando.set(false);
     }
   }
+}
+
+function mensagemDeErro(error: unknown): string {
+  if (
+    error instanceof DadosInvalidosError ||
+    error instanceof InscricaoDuplicadaError ||
+    error instanceof TurmaEncerradaError ||
+    error instanceof TurmaNaoEncontradaError
+  ) {
+    return error.message;
+  }
+  return 'Não foi possível concluir a inscrição. Tente novamente mais tarde.';
 }
