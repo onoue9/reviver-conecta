@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create environment.ts from example
+        run: |
+          if [ -f src/environments/environment.example.ts ] && [ ! -f src/environments/environment.ts ]; then
+            cp src/environments/environment.example.ts src/environments/environment.ts
+          fi
+
+      - name: Build
+        run: npx ng build
+
+      - name: Test
+        run: npx ng test --watch=false
