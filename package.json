@@ -12,7 +12,8 @@
     "watch": "ng build --watch --configuration development",
     "pretest": "npm run ensure-env",
     "test": "ng test",
-    "emulators": "npx -y firebase-tools@15 emulators:start"
+    "emulators": "npx -y firebase-tools@15 emulators:start",
+    "seed": "node scripts/seed-emulators.mjs"
   },
   "private": true,
   "packageManager": "npm@10.9.9",
