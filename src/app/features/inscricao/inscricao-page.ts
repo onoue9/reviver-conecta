@@ -58,22 +58,42 @@ import { InscricaoService, ResultadoInscricao } from '../../services/inscricao.s
         <mat-form-field>
           <mat-label>Nome completo</mat-label>
           <input matInput formControlName="nome" autocomplete="name" required />
+          @if (form.controls.nome.hasError('required')) {
+            <mat-error>Informe o seu nome completo</mat-error>
+          } @else if (form.controls.nome.hasError('minlength')) {
+            <mat-error>Informe pelo menos 3 letras no nome</mat-error>
+          }
         </mat-form-field>
         <mat-form-field>
           <mat-label>Data de nascimento</mat-label>
           <input matInput type="date" formControlName="dataNascimento" required />
+          @if (form.controls.dataNascimento.hasError('required')) {
+            <mat-error>Informe a data de nascimento</mat-error>
+          }
         </mat-form-field>
         <mat-form-field>
           <mat-label>Telefone (com DDD)</mat-label>
           <input matInput type="tel" formControlName="telefone" autocomplete="tel" required />
+          @if (
+            form.controls.telefone.hasError('required') ||
+            form.controls.telefone.hasError('pattern')
+          ) {
+            <mat-error>Informe o telefone com DDD, ex.: (11) 91234-5678</mat-error>
+          }
         </mat-form-field>
         <mat-form-field>
           <mat-label>E-mail (opcional)</mat-label>
           <input matInput type="email" formControlName="email" autocomplete="email" />
+          @if (form.controls.email.hasError('email')) {
+            <mat-error>Informe um e-mail válido, ex.: nome&#64;exemplo.com</mat-error>
+          }
         </mat-form-field>
         <mat-form-field>
           <mat-label>Bairro</mat-label>
           <input matInput formControlName="bairro" required />
+          @if (form.controls.bairro.hasError('required')) {
+            <mat-error>Informe o bairro onde você mora</mat-error>
+          }
         </mat-form-field>
         <mat-checkbox formControlName="consentimentoLgpd">
           Autorizo a ONG Reviver Capão a usar meus dados apenas para esta inscrição (LGPD).
@@ -85,6 +105,9 @@ import { InscricaoService, ResultadoInscricao } from '../../services/inscricao.s
         <button mat-flat-button type="submit" [disabled]="form.invalid || enviando()">
           {{ enviando() ? 'Enviando…' : 'Confirmar inscrição' }}
         </button>
+        @if (!form.controls.consentimentoLgpd.value) {
+          <p class="dica-consentimento">Marque a autorização de uso dos dados para continuar</p>
+        }
       </form>
     } @else if (erro()) {
       <p class="erro" role="alert">{{ erro() }}</p>
@@ -94,11 +117,16 @@ import { InscricaoService, ResultadoInscricao } from '../../services/inscricao.s
     .form {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
       max-width: 480px;
     }
     .erro {
       color: var(--mat-sys-error);
+    }
+    .dica-consentimento {
+      color: var(--mat-sys-on-surface-variant);
+      font-size: 0.875rem;
+      margin: 0;
     }
   `,
 })
