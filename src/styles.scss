@@ -43,3 +43,10 @@ h2,
 h3 {
   line-height: 1.25;
 }
+
+a:focus-visible,
+button:focus-visible,
+.mat-mdc-button-base.mat-mdc-button-base:focus-visible {
+  outline: 3px solid var(--mat-sys-on-surface, #1a1b1f);
+  outline-offset: 2px;
+}
